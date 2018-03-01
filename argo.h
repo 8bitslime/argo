@@ -27,7 +27,7 @@ typedef enum argo_type {
 } argo_type;
 
 typedef struct argo_arg {
-	char      character; // -c
+	char      character; // -f
 	char      *fullName; // --fullName
 	void      *ptr;      // pointer to where to store result (or function pointer)
 	argo_type type;      // type of argument
@@ -129,12 +129,17 @@ static inline void _argo_fulfil_arg(argo_arg *arg, char *value) {
 
 static int argo_parse(char ***leftover, int argc, char **argv, argo_arg *list) {
 	int leftoverCount = 0;
+	int maxLeftovers = ARGO_MAX_LEFTOVERS;
 	
 	#if ARGO_MAX_LEFTOVERS == 0
 		int leftovers[1];
 	#else
 		int leftovers[ARGO_MAX_LEFTOVERS];
 	#endif
+	
+	if (leftover == NULL) {
+		maxLeftovers = 0;
+	}
 	
 	for (int j = 0; list[j].type != ARGO_END; j++) {
 		if (list[j].type == ARGO_FLAG) {
@@ -166,7 +171,6 @@ static int argo_parse(char ***leftover, int argc, char **argv, argo_arg *list) {
 					if (list[j].type == ARGO_HELP) {
 						argo_print_help(list);
 						exit(0);
-						*leftover = NULL;
 						return 0;
 					} else if (list[j].type == ARGO_FLAG) {
 						*((int*)list[j].ptr) = 1;
@@ -184,7 +188,6 @@ static int argo_parse(char ***leftover, int argc, char **argv, argo_arg *list) {
 					if (list[j].type == ARGO_HELP) {
 						argo_print_help(list);
 						exit(0);
-						*leftover = NULL;
 						return 0;
 					}
 					
@@ -226,13 +229,13 @@ static int argo_parse(char ***leftover, int argc, char **argv, argo_arg *list) {
 			}
 		}
 		
-		if (leftoverCount < ARGO_MAX_LEFTOVERS) {
+		if (leftoverCount < maxLeftovers) {
 			leftovers[leftoverCount] = i;
 			leftoverCount++;
 		}
 	}
 	
-	if (leftoverCount) {
+	if (leftoverCount && maxLeftovers) {
 		char **out = malloc(leftoverCount * sizeof(char*));
 		
 		if (out == NULL) {
@@ -248,7 +251,9 @@ static int argo_parse(char ***leftover, int argc, char **argv, argo_arg *list) {
 		return leftoverCount;
 	} else {
 		
-		*leftover = NULL;
+		if (leftover != NULL) {
+			*leftover = NULL;
+		}
 		return 0;
 	}
 }

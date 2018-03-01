@@ -21,9 +21,10 @@ int main(int argc, char **argv) {
 		//If you don't plan on using my help print function then just ignore groups
 		ARGO_LIST_GROUP("Arguments and whatnot"),
 		
-		//Flags are essentially booleans, the function will always set them to either 0 or 1
+		//Flags are essentially booleans, the parsing will always set them to either 0 or 1
 		ARGO_LIST_FLAG('f', "flag", &flag, "flag type argument"),
 		
+		//The pointer given is not checked to be valid, do not put NULL unless the character is 0 and the full name is NULL as well
 		ARGO_LIST_INT('i', "integer", &integer, "integer type argument"),
 		ARGO_LIST_CHAR('c', "char", &character, "char type argument"),
 		ARGO_LIST_DOUBLE('d', "double", &floating, "double type argument"),
@@ -36,7 +37,8 @@ int main(int argc, char **argv) {
 	};
 	
 	//This function will allocate an array of strings (pointing to the strings in argv, NOT copies)
-	//If you dont want to allocate anything, add `#define ARGO_MAX_LEFTOVERS 0` before you include the library
+	//If you dont want to allocate anything, pass NULL to the function instead of a valid pointer
+	//for example `argo_parse(NULL, argc, argv, list)` will always return 0 and never allocate anything
 	char **leftover;
 	
 	//If the argument list is set up properly, this function should never fail (should... if you prove me wrong please let me know!)
