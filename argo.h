@@ -14,6 +14,10 @@
 #define ARGO_MAX_LEFTOVERS 128
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum argo_type {
 	ARGO_END = 0,
 	ARGO_GROUP,
@@ -257,5 +261,9 @@ static int argo_parse(char ***leftover, int argc, char **argv, argo_arg *list) {
 		return 0;
 	}
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //ARGO_H

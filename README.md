@@ -9,14 +9,14 @@ Arguments are specified in a number of ways resembling GNU's `getop`,
 
 Types of arguments:
 
-- Flag: takes int pointer, no input value, will always set the pointer to either 1 or 0, can specify multiple flags in shorthand i.e. `-abc` (sets flags a, b, and c)
-- Int: takes int pointer, receives valid atoi strings, will not affect its pointer if the argument is not passed
-- Char: takes char pointer, receives first character of inputted string, will not affect its pointer if the argument is not passed
-- Double: takes double pointer, receives valid atof strings, will not affect its pointer if the argument is not passed
+- Flag: takes `int` pointer, no input value, will always set the pointer to either 1 or 0, can specify multiple flags in shorthand i.e. `-abc` (sets flags a, b, and c)
+- Int: takes `int` pointer, receives valid atoi strings, will not affect its pointer if the argument is not passed
+- Char: takes `char` pointer, receives first character of inputted string, will not affect its pointer if the argument is not passed
+- Double: takes `double` pointer, receives valid atof strings, will not affect its pointer if the argument is not passed
 - String: takes `char*` pointer, receives strings, will not affect its pointer if the argument is not passed
 
 ## Usage
-Include the header file `argo.h` then create an array of `argo_arg`s and finally call the function `argo_parse` and boom! You're done!
+Include the header file [`argo.h`](argo.h) then create an array of `argo_arg`s and finally call the function `argo_parse` and boom! You're done!
 
 `argo_parse` is defined as: `int argo_parse(char ***leftover, int argc, char **argv, argo_arg *list)`
 
